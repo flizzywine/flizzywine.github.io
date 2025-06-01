@@ -56,12 +56,9 @@
             background-color: #6b0000;
         }
         .result-container {
-            display: flex;
-            gap: 20px;
             margin-top: 20px;
         }
         .main-result {
-            flex: 3;
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
@@ -69,15 +66,13 @@
             display: none;
         }
         .all-yao {
-            flex: 2;
             background-color: #f5f5f5;
             padding: 15px;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             display: none;
             font-size: 14px;
-            max-height: 500px;
-            overflow-y: auto;
+            margin-top: 20px;
         }
         .gua-name {
             font-size: 24px;
@@ -190,6 +185,22 @@
             color: #2196F3;
             text-align: center;
         }
+
+        /* 响应式设计 - 移动设备优化 */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            .input-section, .main-result, .all-yao, .liuren-section {
+                padding: 15px;
+            }
+            .gua-name {
+                font-size: 20px;
+            }
+            .gua-ci-container {
+                padding: 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -259,15 +270,15 @@
             </div>
             
             <div class="yao-info">
-                <div class="yao-title">爻辞:</div>
+                <div class="yao-title">动爻爻辞:</div>
                 <div id="yaoText"></div>
             </div>
             <div class="yao-info">
-                <div class="yao-title">象传:</div>
+                <div class="yao-title">动爻象传:</div>
                 <div id="xiangText"></div>
             </div>
             <div class="yao-info">
-                <div class="yao-title">爻辞与象传:</div>
+                <div class="yao-title">动爻爻辞与象传:</div>
                 <div id="yaoAndXiang"></div>
             </div>
         </div>
