@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>小六壬计算器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .calculator {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="input-group">
+            <input type="number" id="num1" placeholder="输入第一个数字">
+        </div>
+        <div class="input-group">
+            <input type="number" id="num2" placeholder="输入第二个数字">
+        </div>
+        <div class="input-group">
+            <input type="number" id="num3" placeholder="输入第三个数字">
+        </div>
+        <button onclick="calculateResults()">计算小六壬</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        
+    const liuyaoDict = {
+        1: { trigram: '震', term: '大安' },
+        2: { trigram: '巽', term: '留连' },
+        3: { trigram: '离', term: '速喜' },
+        4: { trigram: '兑', term: '赤口' },
+        5: { trigram: '坎', term: '小吉' },
+        6: { trigram: '中', term: '空亡' },
+        7: { trigram: '坤', term: '病符' },
+        8: { trigram: '艮', term: '桃花' },
+        9: { trigram: '乾', term: '天德' }
+    };
+
+    // 安全模9计算函数（处理负数和小数）
+    function safeMod9(n) {
+        // 处理非数值输入
+        const num = Number(n) || 0;
+        // 计算数学意义上的模9
+        const remainder = ((num % 9) + 9) % 9;
+        return remainder === 0 ? 9 : remainder;
+    }
+
+    // 主计算函数
+    function calculateResults() {
+        const num1 = parseFloat(document.getElementById('num1').value) || 0;
+        const num2 = parseFloat(document.getElementById('num2').value) || 0;
+        const num3 = parseFloat(document.getElementById('num3').value) || 0;
+
+
+        // 计算结果序列
+        const result1 = liuyaoDict[safeMod9(num1)].term;
+        const result2 = liuyaoDict[safeMod9(num1 + num2 - 1)].term;
+        const result3 = liuyaoDict[safeMod9(num1 + num2 + num3 - 2)].term;
+        
+        const resultElement = document.getElementById('result');
+        resultElement.textContent = `${result1} → ${result2} → ${result3}`;
+        resultElement.style.color = '#2196F3';
+        
+    }
+
+        
+    </script>
+</body>
+</html>
