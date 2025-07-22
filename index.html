@@ -380,7 +380,7 @@
             document.getElementById('guaStructure').textContent = `上卦: ${upperGua}, 下卦: ${lowerGua}`;
             document.getElementById('yaoText').textContent = yaoText.爻辞;
             document.getElementById('xiangText').textContent = yaoText.象传;
-            document.getElementById('yaoAndXiang').textContent =yaoText.爻辞 + '。 象曰：' + yaoText.象传;
+            document.getElementById('yaoAndXiang').textContent = `${guaName}卦 ${yaoText.爻数}动：${yaoText.爻辞}。 象曰：${yaoText.象传}`;
             
             // 显示卦辞信息
             if (guaCiInfo) {
