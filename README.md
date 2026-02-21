@@ -1,6 +1,6 @@
 # 易经与小六壬查询工具
 
-一个现代化的传统占卜查询网站，基于 GitHub Pages 部署。
+一个现代化的传统占卜查询与学习网站，基于 GitHub Pages 部署。
 
 🔗 **在线访问**: https://flizzywine.github.io
 
@@ -13,6 +13,22 @@
   - 卦辞、彖传、大象传
   - **动爻优先显示**：卦名 爻名动：爻辞。象曰：象传
   - 全卦六爻详解
+
+### 📚 周易交互式学习（新增）
+- **可视化卦象**：清晰展示 64 卦的六爻排列
+- **爻交互操作**：点击任意爻可翻转阴阳，实时查看变卦
+- **卦象关系**：一键查看互卦、反卦、对卦（错卦）、综卦
+- **智能搜索**：支持卦名、简称搜索
+- **爻辞展示**：显示完整的爻辞、象曰、彖曰
+- **变卦推演**：支持多爻同时变化，动态计算变卦
+
+卦象关系说明：
+- **本卦**：当前显示的卦象
+- **变卦**：通过点击爻翻转阴阳得到的卦
+- **互卦**：取 2-3-4 爻为下卦，3-4-5 爻为上卦
+- **反卦**：上下卦互换
+- **对卦（错卦）**：阴阳全反
+- **综卦**：上下颠倒
 
 ### 🐉 小六壬九宫系统
 - 输入月日时或任意三个数字
@@ -32,15 +48,19 @@
 
 ```
 .
-├── index.html          # 主页面（单文件应用）
-├── app.js              # JavaScript 逻辑
-├── data.js             # 六十四卦数据
-├── data.json           # 原始数据备份
+├── index.html              # 主页面（单文件应用）
+├── app.js                  # 主应用逻辑（查询功能）
+├── yijing-study.js         # 周易学习模块 - 数据模型与逻辑 ⭐新增
+├── yijing-study-ui.js      # 周易学习模块 - UI交互 ⭐新增
+├── data.js                 # 六十四卦数据
+├── data.json               # 原始数据备份
+├── convert_data.py         # 数据转换脚本
 ├── tests/
-│   └── zhouyi.spec.js  # Playwright 自动化测试（14个测试用例）
-├── playwright.config.js # Playwright 配置文件
-├── package.json        # 项目配置与测试依赖
-└── README.md           # 项目说明
+│   └── zhouyi.spec.js      # Playwright 自动化测试
+├── playwright.config.js    # Playwright 配置文件
+├── package.json            # 项目配置与测试依赖
+├── push-helper.sh          # Git 推送辅助脚本
+└── README.md               # 项目说明
 ```
 
 ## 🚀 本地运行
@@ -62,9 +82,9 @@ npx serve .
 
 ### 运行自动化测试
 
-项目使用 Playwright 编写了 14 个测试用例，覆盖：
+项目使用 Playwright 编写了测试用例，覆盖：
 - 页面基础功能测试
-- 易经卦象查询测试（乾卦、泰卦、复卦等）
+- 易经卦象查询测试
 - 小六壬九宫计算测试
 - 响应式布局测试
 
@@ -87,17 +107,21 @@ npm run test:headed
 
 ## 📝 数据来源
 
-- **易经数据**：基于《周易》原文整理
+- **易经数据**：基于《周易》原文、《高岛易断》整理
 - **包含内容**：
   - 六十四卦卦辞、彖传、大象传
   - 三百八十四爻的爻辞与小象传
   - 卦象结构（上卦、下卦）
+  - 互卦、反卦、对卦、综卦关系计算
 
 ## 🛠️ 技术栈
 
 - **HTML5**: 语义化结构
 - **Tailwind CSS**: CDN 引入，无需构建
-- **Vanilla JavaScript**: 原生 JS，无框架依赖
+- **Vanilla JavaScript**: 原生 JS，模块化设计
+  - `app.js`: 查询功能模块
+  - `yijing-study.js`: 学习功能数据模型
+  - `yijing-study-ui.js`: 学习功能交互逻辑
 - **Google Fonts**: Noto Serif SC（正文）+ Ma Shan Zheng（书法标题）
 - **Playwright**: 端到端自动化测试框架
 
@@ -110,6 +134,14 @@ npm run test:headed
 4. 点击「查询卦象」按钮
 
 **示例**: 上卦1（乾）+ 下卦8（坤）+ 动爻3 = 泰卦三爻动
+
+### 周易学习模式
+1. 切换到「学习」标签页
+2. **浏览卦象**：六爻从上往下排列（上爻在最上，初爻在最下）
+3. **搜索卦象**：输入卦名（如："需"、"乾"）或简称（如："水天"）
+4. **变卦操作**：点击任意爻，该爻会标记为变爻，右侧实时显示变卦
+5. **查看关系**：右侧面板显示当前卦的互卦、反卦、对卦、综卦
+6. **阅读卦辞**：查看卦辞、彖曰、象曰和爻辞
 
 ### 小六壬九宫
 1. 输入月、日、时（或任意三个正整数）
@@ -142,21 +174,35 @@ tailwind.config = {
 }
 ```
 
-### 添加数据
-编辑 `data.js`，按以下格式添加卦象数据：
+### 数据模型参考
+
+#### 八卦定义
 ```javascript
-const guaDatabase = {
-    "卦名": {
-        "上卦": "卦名",
-        "下卦": "卦名",
-        "卦辞": "...",
-        "彖辞": "...",
-        "大象辞": "...",
-        "爻辞初爻": "...",
-        "小象传1爻": "...",
-        // ...
-    }
+const TRIGRAMS = {
+    qian: { name: "乾", symbol: "☰", binary: "111", attribute: "天", nature: "健" },
+    kun: { name: "坤", symbol: "☷", binary: "000", attribute: "地", nature: "顺" },
+    // ...
 };
+```
+
+#### 卦象数据结构
+```javascript
+class Gua {
+    constructor(name, yaos, guaCi, tuanCi, daXiangCi) {
+        this.name = name;        // 卦名
+        this.yaos = yaos;        // 六爻数组 [Yao, Yao, ...]
+        this.guaCi = guaCi;      // 卦辞
+        this.tuanCi = tuanCi;    // 彖辞
+        this.daXiangCi = daXiangCi; // 大象辞
+    }
+    
+    // 互卦、反卦、对卦、综卦计算方法
+    getHuGua() { ... }
+    getFanGua() { ... }
+    getDuiGua() { ... }
+    getZongGua() { ... }
+    getChangedGua(positions) { ... }
+}
 ```
 
 ## 📱 移动端适配
@@ -165,6 +211,7 @@ const guaDatabase = {
 - 自动调整为单列布局
 - 输入框增大便于触摸
 - 字号自适应屏幕
+- 学习模式支持触摸交互
 
 ## 🌐 部署到 GitHub Pages
 
@@ -174,15 +221,21 @@ const guaDatabase = {
 4. 选择部署来源为 `main` 分支
 5. 访问 `https://你的用户名.github.io/仓库名`
 
+### 快速推送更新
+```bash
+./push-helper.sh "更新说明"
+```
+
 ## 📄 许可证
 
 MIT License - 自由使用和修改
 
 ## 🙏 致谢
 
-- 周易原文参考：《周易正义》《周易集解》
+- 周易原文参考：《周易正义》《周易集解》《高岛易断》
 - 字体：Google Fonts（Noto Serif SC, Ma Shan Zheng）
 - 设计灵感：传统中式美学
+- 算法参考：传统互卦、变卦、对卦、综卦计算方法
 
 ---
 
