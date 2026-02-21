@@ -147,45 +147,17 @@ function toggleAllYao() {
     allYaoDiv.classList.toggle('hidden');
 }
 
-const liurenGods = ['大安', '留连', '速喜', '赤口', '小吉', '空亡', '病符', '桃花', '天德'];
-const liurenDetails = {
-    '大安': {
-        desc: '大吉',
-        detail: '大安事事昌，求谋在东方，失物去不远，宅舍保安康。行人身未动，病者主无妨。五行：木，方位：正东。代表长期、缓慢、稳定。'
-    },
-    '留连': {
-        desc: '平平',
-        detail: '留连事难成，求谋日未明。官事只宜缓，去者未回程。失物南方见，急讨方称心。五行：木，方位：西南。代表停止、反复、复杂。'
-    },
-    '速喜': {
-        desc: '中吉',
-        detail: '速喜喜来临，求财向南行。失物申午未，逢人路上寻。官事有福德，病者无祸侵。五行：火，方位：正南。代表惊喜、快速、突然。'
-    },
-    '赤口': {
-        desc: '大凶',
-        detail: '赤口主口舌，官非切要防。失物急去寻，行人有惊慌。鸡犬多作怪，病者出西方。五行：金，方位：正西。代表争斗、凶恶、伤害。'
-    },
-    '小吉': {
-        desc: '小吉',
-        detail: '小吉最吉昌，路上好商量。阴人来报喜，失物在坤方。行人立便至，交关甚是强。五行：水，方位：正北。代表起步、不多、尚可。'
-    },
-    '空亡': {
-        desc: '大凶',
-        detail: '空亡事不祥，阴人多乖张。求财无利益，行人有灾殃。失物寻不见，官事有刑伤。五行：土，方位：正中。代表失去、虚伪、空想。'
-    },
-    '病符': {
-        desc: '凶',
-        detail: '病符主病态、异常、治疗。五行：金，方位：西南。代表先有病才需要治疗，需注意身体健康。'
-    },
-    '桃花': {
-        desc: '中',
-        detail: '桃花主欲望、牵绊、异性。五行：土，方位：东北。代表人际关系、牵绊此事，与异性缘分相关。'
-    },
-    '天德': {
-        desc: '大吉',
-        detail: '天德主贵人、上司、高远。五行：金，方位：西北。代表求人办事、靠人成事，有贵人相助。'
-    }
-};
+const liurenElements = [
+    '大安（艮）（木）：大安事事昌，求谋在东方，失物去不远，宅舍保安康。行人身未动，病者主无妨。代表长期、缓慢、稳定。',
+    '留连（巽）（木）：留连事难成，求谋日未明。官事只宜缓，去者未回程。失物南方见，急讨方称心。代表停止、反复、复杂。',
+    '速喜（离）（火）：速喜喜来临，求财向南行。失物申午未，逢人路上寻。官事有福德，病者无祸侵。代表惊喜、快速、突然。',
+    '赤口（乾）（金）：赤口主口舌，官非切要防。失物急去寻，行人有惊慌。鸡犬多作怪，病者出西方。代表争斗、凶恶、伤害。',
+    '小吉（坎）（水）：小吉最吉昌，路上好商量。阴人来报喜，失物在坤方。行人立便至，交关甚是强。代表起步、不多、尚可。',
+    '空亡（坤）（土）：空亡事不祥，阴人多乖张。求财无利益，行人有灾殃。失物寻不见，官事有刑伤。代表失去、虚伪、空想。',
+    '病符（兑）（金）：病符主病态、异常、治疗。代表先有病才需要治疗，需注意身体健康。',
+    '桃花（震）（土）：桃花主欲望、牵绊、异性。代表人际关系、牵绊此事，与异性缘分相关。',
+    '天德（乾）（金）：天德主贵人、上司、高远。代表求人办事、靠人成事，有贵人相助。'
+];
 
 function calcLiuren() {
     const n1 = parseInt(document.getElementById('liuren-1').value) || 0;
@@ -197,37 +169,48 @@ function calcLiuren() {
         return;
     }
 
-    let k1 = n1 % 9;
-    let k2 = (n1 + n2) % 9;
-    let k3 = (n1 + n2 + n3) % 9;
+    const firstIndex = (n1 - 1) % 9;
+    const secondIndex = (n1 + n2 - 2) % 9;
+    const thirdIndex = (n1 + n2 + n3 - 3) % 9;
 
-    if (k1 === 0) k1 = 9;
-    if (k2 === 0) k2 = 9;
-    if (k3 === 0) k3 = 9;
+    const result1 = liurenElements[firstIndex];
+    const result2 = liurenElements[secondIndex];
+    const result3 = liurenElements[thirdIndex];
 
-    const index1 = k1 - 1;
-    const index2 = k2 - 1;
-    const index3 = k3 - 1;
+    const god1 = result1.split('（')[0];
+    const god2 = result2.split('（')[0];
+    const god3 = result3.split('（')[0];
 
-    const result1 = liurenGods[index1];
-    const result2 = liurenGods[index2];
-    const result3 = liurenGods[index3];
+    document.getElementById('liuren-god').textContent = `${god1} → ${god2} → ${god3}`;
 
-    document.getElementById('liuren-god').textContent = `${result1} → ${result2} → ${result3}`;
-
-    const detail1 = liurenDetails[result1];
-    const detail2 = liurenDetails[result2];
-    const detail3 = liurenDetails[result3];
+    const desc1 = getGodDesc(god1);
+    const desc2 = getGodDesc(god2);
+    const desc3 = getGodDesc(god3);
 
     document.getElementById('liuren-desc').textContent =
-        `初：${detail1.desc} | 中：${detail2.desc} | 末：${detail3.desc}`;
+        `初：${desc1} | 中：${desc2} | 末：${desc3}`;
 
     document.getElementById('liuren-detail').innerHTML =
-        `<strong>【初段】${result1}：</strong>${detail1.detail}<br><br>` +
-        `<strong>【中段】${result2}：</strong>${detail2.detail}<br><br>` +
-        `<strong>【末段】${result3}：</strong>${detail3.detail}`;
+        `<strong>【初段】${result1}</strong><br><br>` +
+        `<strong>【中段】${result2}</strong><br><br>` +
+        `<strong>【末段】${result3}</strong>`;
 
     document.getElementById('liuren-result').classList.remove('hidden');
+}
+
+function getGodDesc(godName) {
+    const descMap = {
+        '大安': '大吉',
+        '留连': '平平',
+        '速喜': '中吉',
+        '赤口': '大凶',
+        '小吉': '小吉',
+        '空亡': '大凶',
+        '病符': '凶',
+        '桃花': '中',
+        '天德': '大吉'
+    };
+    return descMap[godName] || '';
 }
 
 // 回车键提交
