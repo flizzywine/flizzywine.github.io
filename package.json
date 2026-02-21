@@ -1,0 +1,26 @@
+{
+  "name": "zhouyi-web",
+  "version": "1.0.0",
+  "description": "一个现代化的传统占卜查询网站，基于 GitHub Pages 部署。",
+  "main": "app.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:headed": "playwright test --headed"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flizzywine/flizzywine.github.io.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/flizzywine/flizzywine.github.io/issues"
+  },
+  "homepage": "https://github.com/flizzywine/flizzywine.github.io#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2"
+  }
+}
