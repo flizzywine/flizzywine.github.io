@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="data.json"></script>
+    
+    <title>易经与小六壬查询工具</title>
+    <style>
+        body {
+            font-family: 'SimSun', '宋体', serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f4e6;
+            color: #333;
+        }
+        h1 {
+            color: #8b0000;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .input-section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #8b0000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #6b0000;
+        }
+        .result-container {
+            margin-top: 20px;
+        }
+        .main-result {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: none;
+        }
+        .all-yao {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: none;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+        .gua-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #8b0000;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .gua-structure {
+            text-align: center;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+        .yao-info {
+            margin-bottom: 15px;
+        }
+        .yao-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #8b0000;
+        }
+        .all-yao-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+            color: #666;
+        }
+        .all-yao-item {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ddd;
+        }
+        .all-yao-item:last-child {
+            border-bottom: none;
+        }
+        .yao-number {
+            font-weight: bold;
+            color: #8b0000;
+        }
+        .number-guide {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .highlight {
+            background-color: #fff8e1;
+            border-left: 3px solid #ffc107;
+            padding-left: 8px;
+        }
+        .gua-ci-container {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .gua-ci-title {
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .gua-ci-content {
+            margin-bottom: 15px;
+        }
+        
+        /* 小六壬样式 */
+        .liuren-section {
+            margin-top: 40px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .liuren-title {
+            color: #8b0000;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .liuren-calculator {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .liuren-input-group {
+            margin-bottom: 15px;
+        }
+        .liuren-button {
+            background-color: #4CAF50;
+        }
+        .liuren-button:hover {
+            background-color: #45a049;
+        }
+        #liuren-result {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+            text-align: center;
+        }
+
+        /* 响应式设计 - 移动设备优化 */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            .input-section, .main-result, .all-yao, .liuren-section {
+                padding: 15px;
+            }
+            .gua-name {
+                font-size: 20px;
+            }
+            .gua-ci-container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>易经卦爻查询</h1>
+    
+    <div class="input-section">
+        <div class="form-group">
+            <label for="upper">上卦数字 (1-8):</label>
+            <input type="number" id="upper" min="1" max="8" placeholder="输入1-8的数字">
+        </div>
+        
+        <div class="form-group">
+            <label for="lower">下卦数字 (1-8):</label>
+            <input type="number" id="lower" min="1" max="8" placeholder="输入1-8的数字">
+        </div>
+        
+        <div class="form-group">
+            <label for="moving">动爻数 (1-6):</label>
+            <input type="number" id="moving" min="1" max="6" placeholder="输入1-6的数字">
+        </div>
+        
+        <button onclick="findGuaYao()">查询卦爻</button>
+        
+        <div class="number-guide">
+            <p>数字对应卦象:</p>
+            <table>
+                <tr>
+                    <th>数字</th>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                    <th>4</th>
+                    <th>5</th>
+                    <th>6</th>
+                    <th>7</th>
+                    <th>8</th>
+                </tr>
+                <tr>
+                    <td>卦名</td>
+                    <td>乾</td>
+                    <td>兑</td>
+                    <td>离</td>
+                    <td>震</td>
+                    <td>巽</td>
+                    <td>坎</td>
+                    <td>艮</td>
+                    <td>坤</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    
+    <div class="result-container">
+        
+        <div id="mainResult" class="main-result">
+            <div class="yao-info">
+                <div class="yao-title">动爻爻辞与象传:</div>
+                <div id="yaoAndXiang"></div>
+            </div>
+            
+            <div class="gua-name" id="guaName"></div>
+            <div class="gua-structure" id="guaStructure"></div>
+            
+            <div class="gua-ci-container">
+                <div class="gua-ci-title">卦辞:</div>
+                <div class="gua-ci-content" id="guaCi"></div>
+                
+                <div class="gua-ci-title">彖传:</div>
+                <div class="gua-ci-content" id="tuanCi"></div>
+                
+                <div class="gua-ci-title">大象传:</div>
+                <div class="gua-ci-content" id="daXiang"></div>
+            </div>
+            
+            <div class="yao-info">
+                <div class="yao-title">动爻爻辞:</div>
+                <div id="yaoText"></div>
+            </div>
+            <div class="yao-info">
+                <div class="yao-title">动爻象传:</div>
+                <div id="xiangText"></div>
+            </div>
+            
+        </div>
+
+        <div id="allYao" class="all-yao">
+            <div class="all-yao-title">本卦所有爻辞</div>
+            <div id="allYaoContent"></div>
+        </div>
+    </div>
+    
+    <!-- 小六壬计算器部分 -->
+    <div class="liuren-section">
+        <h2 class="liuren-title">小六壬计算器</h2>
+        
+        <div class="liuren-calculator">
+            <div class="liuren-input-group">
+                <input type="number" id="num1" placeholder="输入第一个数字">
+            </div>
+            <div class="liuren-input-group">
+                <input type="number" id="num2" placeholder="输入第二个数字">
+            </div>
+            <div class="liuren-input-group">
+                <input type="number" id="num3" placeholder="输入第三个数字">
+            </div>
+            <button class="liuren-button" onclick="calculateLiuren()">计算小六壬</button>
+            <div id="liuren-result"></div>
+        </div>
+    </div>
+
+    <script>
+        // 数字到卦名的映射
+        const numberToGua = {
+            "1": "乾",
+            "2": "兑",
+            "3": "离",
+            "4": "震",
+            "5": "巽",
+            "6": "坎",
+            "7": "艮",
+            "8": "坤"
+        };
+
+        function findGuaYao() {
+            // 获取用户输入
+            const upperNum = document.getElementById('upper').value;
+            const lowerNum = document.getElementById('lower').value;
+            const movingYao = document.getElementById('moving').value;
+            
+            // 验证输入
+            if (!upperNum || !lowerNum || !movingYao) {
+                alert('请输入完整的卦爻信息');
+                return;
+            }
+            
+            if (upperNum < 1 || upperNum > 8 || lowerNum < 1 || lowerNum > 8) {
+                alert('上卦和下卦数字必须在1-8之间');
+                return;
+            }
+            
+            if (movingYao < 1 || movingYao > 6) {
+                alert('动爻数必须在1-6之间');
+                return;
+            }
+            
+            // 获取卦名
+            const upperGua = numberToGua[upperNum];
+            const lowerGua = numberToGua[lowerNum];
+            
+            // 查找对应的卦名
+            let guaName = '';
+            for (const name in guaData) {
+                if (guaData[name].上卦 === upperGua && guaData[name].下卦 === lowerGua) {
+                    guaName = name;
+                    break;
+                }
+            }
+            
+            if (!guaName) {
+                alert('未找到对应的卦名，请检查输入是否正确');
+                return;
+            }
+            
+            // 查找爻辞
+            const yaoText = findYaoText(guaName, movingYao);
+            
+            if (!yaoText) {
+                alert('未找到对应的爻辞');
+                return;
+            }
+            
+            // 查找卦辞、彖传和大象传
+            const guaCiInfo = findGuaCi(guaName);
+            
+            // 显示主要结果
+            document.getElementById('guaName').textContent = guaName;
+            document.getElementById('guaStructure').textContent = `上卦: ${upperGua}, 下卦: ${lowerGua}`;
+            document.getElementById('yaoText').textContent = yaoText.爻辞;
+            document.getElementById('xiangText').textContent = yaoText.象传;
+            document.getElementById('yaoAndXiang').textContent = `${guaName}卦 ${yaoText.爻数}动：${yaoText.爻辞}。 象曰：${yaoText.象传}`;
+            
+            // 显示卦辞信息
+            if (guaCiInfo) {
+                document.getElementById('guaCi').textContent = guaCiInfo.卦辞;
+                document.getElementById('tuanCi').textContent = guaCiInfo.彖辞;
+                document.getElementById('daXiang').textContent = guaCiInfo.大象辞;
+            }
+            
+            document.getElementById('mainResult').style.display = 'block';
+            
+            // 显示所有爻辞
+            displayAllYao(guaName, movingYao);
+            document.getElementById('allYao').style.display = 'block';
+        }
+        
+        function findYaoText(guaName, yaoNum) {
+            // 将数字转换为爻的名称
+            const yaoNames = ['初爻', '二爻', '三爻', '四爻', '五爻', '上爻'];
+            const yaoName = yaoNames[yaoNum - 1];
+                    
+            // 在爻辞数据中查找
+            for (const yao of yaoData) {
+                if (yao.卦名 === guaName && yao.爻数 === yaoName) {
+                    return yao;
+                }
+            }
+                    
+            return null;
+        }
+        
+        function findGuaCi(guaName) {
+            // 在卦辞数据中查找
+            for (const gua of GuaCiData) {
+                if (gua.卦名 === guaName) {
+                    return gua;
+                }
+            }
+            return null;
+        }
+        
+        function displayAllYao(guaName, movingYao) {
+            const allYaoContent = document.getElementById('allYaoContent');
+            allYaoContent.innerHTML = '';
+            
+            // 获取该卦的所有爻辞
+            const allYaoForGua = yaoData.filter(yao => yao.卦名 === guaName);
+            
+            // 按爻位顺序排序
+            const yaoOrder = ['初爻', '二爻', '三爻', '四爻', '五爻', '上爻'];
+            allYaoForGua.sort((a, b) => yaoOrder.indexOf(a.爻数) - yaoOrder.indexOf(b.爻数));
+            
+            // 显示所有爻辞
+            allYaoForGua.forEach(yao => {
+                const yaoItem = document.createElement('div');
+                yaoItem.className = 'all-yao-item';
+                
+                // 如果是当前动爻，添加高亮样式
+                const yaoNum = yaoOrder.indexOf(yao.爻数) + 1;
+                if (yaoNum == movingYao) {
+                    yaoItem.className += ' highlight';
+                }
+                
+                yaoItem.innerHTML = `
+                    <div><span class="yao-number">${yao.爻数}</span></div>
+                    <div><strong>爻辞:</strong> ${yao.爻辞}</div>
+                    <div><strong>象传:</strong> ${yao.象传}</div>
+                `;
+                
+                allYaoContent.appendChild(yaoItem);
+            });
+        }
+        
+        // 小六壬计算相关函数
+        const liuyaoDict = {
+            1: { trigram: '震', term: '大安' },
+            2: { trigram: '巽', term: '留连' },
+            3: { trigram: '离', term: '速喜' },
+            4: { trigram: '兑', term: '赤口' },
+            5: { trigram: '坎', term: '小吉' },
+            6: { trigram: '中', term: '空亡' },
+            7: { trigram: '坤', term: '病符' },
+            8: { trigram: '艮', term: '桃花' },
+            9: { trigram: '乾', term: '天德' }
+        };
+
+        // 安全模9计算函数（处理负数和小数）
+        function safeMod9(n) {
+            // 处理非数值输入
+            const num = Number(n) || 0;
+            // 计算数学意义上的模9
+            const remainder = ((num % 9) + 9) % 9;
+            return remainder === 0 ? 9 : remainder;
+        }
+
+        // 小六壬主计算函数
+        function calculateLiuren() {
+            const num1 = parseFloat(document.getElementById('num1').value) || 0;
+            const num2 = parseFloat(document.getElementById('num2').value) || 0;
+            const num3 = parseFloat(document.getElementById('num3').value) || 0;
+
+            // 计算结果序列
+            const result1 = liuyaoDict[safeMod9(num1)].term;
+            const result2 = liuyaoDict[safeMod9(num1 + num2 - 1)].term;
+            const result3 = liuyaoDict[safeMod9(num1 + num2 + num3 - 2)].term;
+            
+            const resultElement = document.getElementById('liuren-result');
+            resultElement.textContent = `${result1} → ${result2} → ${result3}`;
+            resultElement.style.color = '#2196F3';
+        }
+    </script>
+</body>
+</html>
