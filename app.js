@@ -12,25 +12,31 @@ const numberToGua = {
 
 // 标签切换
 function switchTab(tab) {
-    const zhouyiSection = document.getElementById('section-zhouyi');
-    const liurenSection = document.getElementById('section-liuren');
-    const zhouyiTab = document.getElementById('tab-zhouyi');
-    const liurenTab = document.getElementById('tab-liuren');
-    
-    if (tab === 'zhouyi') {
-        zhouyiSection.classList.remove('hidden');
-        liurenSection.classList.add('hidden');
-        zhouyiTab.classList.add('tab-active');
-        zhouyiTab.classList.remove('text-gray-600');
-        liurenTab.classList.remove('tab-active');
-        liurenTab.classList.add('text-gray-600');
-    } else {
-        zhouyiSection.classList.add('hidden');
-        liurenSection.classList.remove('hidden');
-        liurenTab.classList.add('tab-active');
-        liurenTab.classList.remove('text-gray-600');
-        zhouyiTab.classList.remove('tab-active');
-        zhouyiTab.classList.add('text-gray-600');
+    const sections = {
+        'zhouyi': document.getElementById('section-zhouyi'),
+        'liuren': document.getElementById('section-liuren'),
+        'yijing-study': document.getElementById('section-yijing-study')
+    };
+    const tabs = {
+        'zhouyi': document.getElementById('tab-zhouyi'),
+        'liuren': document.getElementById('tab-liuren'),
+        'yijing-study': document.getElementById('tab-yijing-study')
+    };
+
+    Object.keys(sections).forEach(key => {
+        if (key === tab) {
+            sections[key].classList.remove('hidden');
+            tabs[key].classList.add('tab-active');
+            tabs[key].classList.remove('text-gray-600');
+        } else {
+            sections[key].classList.add('hidden');
+            tabs[key].classList.remove('tab-active');
+            tabs[key].classList.add('text-gray-600');
+        }
+    });
+
+    if (tab === 'yijing-study' && typeof initYijingStudy === 'function') {
+        initYijingStudy();
     }
 }
 

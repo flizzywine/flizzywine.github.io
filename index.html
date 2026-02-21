@@ -71,11 +71,14 @@
     <main class="relative container mx-auto px-4 py-8 max-w-4xl">
         <!-- 标签切换 -->
         <div class="flex justify-center mb-8 bg-white rounded-lg shadow-md p-1">
-            <button onclick="switchTab('zhouyi')" id="tab-zhouyi" class="flex-1 py-3 px-6 rounded-md font-semibold transition-all tab-active">
+            <button onclick="switchTab('zhouyi')" id="tab-zhouyi" class="tab-btn flex-1 py-3 px-6 rounded-md font-semibold transition-all tab-active">
                 易经六十四卦
             </button>
-            <button onclick="switchTab('liuren')" id="tab-liuren" class="flex-1 py-3 px-6 rounded-md font-semibold text-gray-600 hover:text-gua-red transition-all">
+            <button onclick="switchTab('liuren')" id="tab-liuren" class="tab-btn flex-1 py-3 px-6 rounded-md font-semibold text-gray-600 hover:text-gua-red transition-all">
                 小六壬
+            </button>
+            <button onclick="switchTab('yijing-study')" id="tab-yijing-study" class="tab-btn flex-1 py-3 px-6 rounded-md font-semibold text-gray-600 hover:text-gua-red transition-all">
+                周易学习
             </button>
         </div>
 
@@ -186,6 +189,120 @@
             </div>
         </section>
 
+        <!-- 周易学习部分 -->
+        <section id="section-yijing-study" class="hidden animate-fade-in-up">
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="bg-gradient-to-r from-amber-50 to-red-50 p-6 border-b border-amber-100">
+                    <h2 class="text-xl font-bold text-gua-red flex items-center gap-2">
+                        <span class="text-2xl">📖</span>
+                        周易学习 - 玩索而得
+                    </h2>
+                    <p class="text-gray-600 mt-2 text-sm">点击爻切换阴阳，探索卦象变化</p>
+                </div>
+                
+                <div class="p-6">
+                    <!-- 三栏布局 -->
+                    <div class="grid lg:grid-cols-12 gap-6">
+                        <!-- 左侧：卦辞详解 -->
+                        <div class="lg:col-span-3 space-y-4">
+                            <h3 class="text-lg font-bold text-gua-red border-b-2 border-amber-200 pb-2">卦辞详解</h3>
+                            <div class="bg-amber-50 p-4 rounded-lg space-y-4">
+                                <div>
+                                    <h4 class="font-bold text-gray-700 mb-1 text-sm">彖曰</h4>
+                                    <p id="study-tuan" class="text-gray-800 text-sm leading-relaxed"></p>
+                                </div>
+                                <div class="border-t border-amber-200 pt-3">
+                                    <h4 class="font-bold text-gray-700 mb-1 text-sm">象曰</h4>
+                                    <p id="study-xiang" class="text-gray-800 text-sm leading-relaxed"></p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 中间：交互式卦象 -->
+                        <div class="lg:col-span-6">
+                            <div id="study-hexagram-view" class="bg-white rounded-lg">
+                                <!-- 动态生成 -->
+                            </div>
+                        </div>
+                        
+                        <!-- 右侧：卦象关系 -->
+                        <div class="lg:col-span-3 space-y-4">
+                            <h3 class="text-lg font-bold text-gua-red border-b-2 border-amber-200 pb-2">卦象关系</h3>
+                            <div id="study-relations-view">
+                                <!-- 动态生成 -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 底部控制区 -->
+                    <div class="mt-8 pt-6 border-t border-amber-100 space-y-4">
+                        <!-- 搜索 -->
+                        <div class="relative">
+                            <div class="flex gap-2">
+                                <input type="text" id="study-search-input" placeholder="输入卦名或简称（如：水天、需）" 
+                                    class="flex-1 px-4 py-2 border-2 border-amber-200 rounded-lg focus:border-gua-red focus:outline-none">
+                                <button onclick="searchGuaHandler()" 
+                                    class="px-6 py-2 bg-gua-red text-white rounded-lg hover:bg-red-800 transition-colors">
+                                    搜索
+                                </button>
+                            </div>
+                            <div id="study-search-results" class="hidden absolute z-10 w-full bg-white border border-amber-200 rounded-lg shadow-lg mt-1 max-h-60 overflow-y-auto">
+                            </div>
+                        </div>
+                        
+                        <!-- 数字定位 -->
+                        <div class="flex flex-wrap items-center gap-3">
+                            <span class="font-semibold text-gray-700 text-sm">数字定位:</span>
+                            <input type="number" id="study-upper" min="1" max="8" placeholder="上卦 1-8" 
+                                class="w-24 px-3 py-2 border-2 border-amber-200 rounded-lg focus:border-gua-red focus:outline-none text-center">
+                            <input type="number" id="study-lower" min="1" max="8" placeholder="下卦 1-8" 
+                                class="w-24 px-3 py-2 border-2 border-amber-200 rounded-lg focus:border-gua-red focus:outline-none text-center">
+                            <input type="number" id="study-moving" min="1" max="6" placeholder="动爻 1-6" 
+                                class="w-24 px-3 py-2 border-2 border-amber-200 rounded-lg focus:border-gua-red focus:outline-none text-center">
+                            <button onclick="numberSearchHandler()" 
+                                class="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors text-sm">
+                                定位
+                            </button>
+                            <button onclick="resetAll()" 
+                                class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors text-sm">
+                                重置
+                            </button>
+                            <span class="text-xs text-gray-500">1乾2兑3离4震5巽6坎7艮8坤</span>
+                        </div>
+                        
+                        <!-- 高亮选择 -->
+                        <div class="flex flex-wrap items-center gap-3">
+                            <span class="font-semibold text-gray-700 text-sm">标红:</span>
+                            <label class="flex items-center gap-1 cursor-pointer">
+                                <input type="checkbox" onchange="onHighlightChange(6, this.checked)" class="w-4 h-4 text-gua-red rounded focus:ring-gua-red">
+                                <span class="text-sm">上</span>
+                            </label>
+                            <label class="flex items-center gap-1 cursor-pointer">
+                                <input type="checkbox" onchange="onHighlightChange(5, this.checked)" class="w-4 h-4 text-gua-red rounded focus:ring-gua-red">
+                                <span class="text-sm">五</span>
+                            </label>
+                            <label class="flex items-center gap-1 cursor-pointer">
+                                <input type="checkbox" onchange="onHighlightChange(4, this.checked)" class="w-4 h-4 text-gua-red rounded focus:ring-gua-red">
+                                <span class="text-sm">四</span>
+                            </label>
+                            <label class="flex items-center gap-1 cursor-pointer">
+                                <input type="checkbox" onchange="onHighlightChange(3, this.checked)" class="w-4 h-4 text-gua-red rounded focus:ring-gua-red">
+                                <span class="text-sm">三</span>
+                            </label>
+                            <label class="flex items-center gap-1 cursor-pointer">
+                                <input type="checkbox" onchange="onHighlightChange(2, this.checked)" class="w-4 h-4 text-gua-red rounded focus:ring-gua-red">
+                                <span class="text-sm">二</span>
+                            </label>
+                            <label class="flex items-center gap-1 cursor-pointer">
+                                <input type="checkbox" onchange="onHighlightChange(1, this.checked)" class="w-4 h-4 text-gua-red rounded focus:ring-gua-red">
+                                <span class="text-sm">初</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- 小六壬部分 -->
         <section id="section-liuren" class="hidden animate-fade-in-up">
             <div class="bg-white rounded-xl shadow-lg overflow-hidden">
@@ -259,6 +376,8 @@
     </footer>
 
     <script src="data.js"></script>
+    <script src="yijing-study.js"></script>
+    <script src="yijing-study-ui.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
