@@ -112,40 +112,50 @@ function renderHexagram() {
     container.innerHTML = html;
 }
 
-// ==================== 渲染卦象关系 ====================
 function renderRelations() {
     const container = document.getElementById('study-relations-view');
     if (!container) return;
-    
+
     const trigramNames = { qian: "天", kun: "地", zhen: "雷", gen: "山", kan: "水", li: "火", xun: "风", dui: "泽" };
-    
+
     const relations = [
         { name: "错卦", gua: currentGua.getDuiGua(), desc: "阴阳全反" },
         { name: "综卦", gua: currentGua.getZongGua(), desc: "上下颠倒" },
         { name: "反卦", gua: currentGua.getFanGua(), desc: "上下卦互换" },
-        { name: "上互卦", gua: currentGua.getShangHuGua(), desc: "345爻" },
-        { name: "下互卦", gua: currentGua.getXiaHuGua(), desc: "234爻" }
+        { name: "上互卦", gua: currentGua.getShangHuGua(), desc: "345爻", isTrigram: true },
+        { name: "下互卦", gua: currentGua.getXiaHuGua(), desc: "234爻", isTrigram: true }
     ];
-    
+
     let html = '<div class="space-y-3">';
-    
+
     for (const rel of relations) {
-        const upper = trigramNames[rel.gua.upperGua] || "";
-        const lower = trigramNames[rel.gua.lowerGua] || "";
-        
+        let displayText;
+        let clickHandler;
+
+        if (rel.isTrigram || rel.gua.isTrigram) {
+            const trigramName = trigramNames[rel.gua.upperGua] || "";
+            displayText = `${rel.gua.name} (${trigramName})`;
+            clickHandler = '';
+        } else {
+            const upper = trigramNames[rel.gua.upperGua] || "";
+            const lower = trigramNames[rel.gua.lowerGua] || "";
+            displayText = `${rel.gua.name} (${upper}${lower}${rel.gua.name})`;
+            clickHandler = `onclick="selectGua(${rel.gua.index})"`;
+        }
+
         html += `
-            <div class="bg-white p-4 rounded-lg shadow-sm border border-amber-100 cursor-pointer hover:shadow-md transition-all" onclick="selectGua(${rel.gua.index})">
+            <div class="bg-white p-4 rounded-lg shadow-sm border border-amber-100 cursor-pointer hover:shadow-md transition-all" ${clickHandler}>
                 <div class="flex justify-between items-center">
                     <div>
                         <div class="font-bold text-gua-red">${rel.name}</div>
-                        <div class="text-sm text-gray-700">${rel.gua.name} (${upper}${lower}${rel.gua.name})</div>
+                        <div class="text-sm text-gray-700">${displayText}</div>
                     </div>
                     <div class="text-xs text-gray-400">${rel.desc}</div>
                 </div>
             </div>
         `;
     }
-    
+
     html += '</div>';
     container.innerHTML = html;
 }

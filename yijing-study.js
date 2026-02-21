@@ -262,12 +262,20 @@ function initGuaData() {
     }
 }
 
-// ==================== 工具函数 ====================
 function binaryToGua(binary) {
     if (binary.length === 3) {
-        // 如果是3位（八卦），查找对应的卦名
-        for (const gua of ALL_GUAS) {
-            if (gua.binaryCode === binary) return gua;
+        for (const [key, trigram] of Object.entries(TRIGRAMS)) {
+            if (trigram.binary === binary) {
+                return {
+                    name: trigram.name,
+                    chineseName: trigram.name,
+                    symbol: trigram.symbol,
+                    upperGua: key,
+                    lowerGua: key,
+                    binary: trigram.binary,
+                    isTrigram: true
+                };
+            }
         }
     }
     return GUA_MAP[binary] || ALL_GUAS[0];
