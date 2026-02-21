@@ -66,17 +66,15 @@ test.describe('周易查询网站测试', () => {
       await expect(page.locator('#gua-structure')).toContainText('上乾');
       await expect(page.locator('#gua-structure')).toContainText('下乾');
       
-      // 验证动爻信息
-      await expect(page.locator('#moving-yao-info')).toContainText('第1爻动');
+      // 验证核心动爻信息显示在最前面
+      await expect(page.locator('#yao-main-display')).toContainText('乾卦');
+      await expect(page.locator('#yao-main-display')).toContainText('初爻动');
+      await expect(page.locator('#yao-main-display')).toContainText('象曰');
       
       // 验证卦辞存在
       await expect(page.locator('#gua-ci')).not.toBeEmpty();
       await expect(page.locator('#tuan-zhuan')).not.toBeEmpty();
       await expect(page.locator('#da-xiang')).not.toBeEmpty();
-      
-      // 验证爻辞存在
-      await expect(page.locator('#yao-text')).not.toBeEmpty();
-      await expect(page.locator('#xiang-text')).toContainText('象曰');
     });
 
     test('查询泰卦三爻', async ({ page }) => {
@@ -89,7 +87,8 @@ test.describe('周易查询网站测试', () => {
       
       await expect(page.locator('#result')).not.toHaveClass(/hidden/);
       await expect(page.locator('#gua-name')).toContainText('泰');
-      await expect(page.locator('#moving-yao-info')).toContainText('第3爻动');
+      await expect(page.locator('#yao-main-display')).toContainText('泰卦');
+      await expect(page.locator('#yao-main-display')).toContainText('三爻动');
     });
 
     test('查询复卦上爻', async ({ page }) => {
@@ -102,7 +101,8 @@ test.describe('周易查询网站测试', () => {
       
       await expect(page.locator('#result')).not.toHaveClass(/hidden/);
       await expect(page.locator('#gua-name')).toContainText('复');
-      await expect(page.locator('#moving-yao-info')).toContainText('第6爻动');
+      await expect(page.locator('#yao-main-display')).toContainText('复卦');
+      await expect(page.locator('#yao-main-display')).toContainText('上爻动');
     });
 
     test('输入验证 - 空值提示', async ({ page }) => {

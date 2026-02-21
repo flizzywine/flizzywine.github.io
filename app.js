@@ -77,20 +77,30 @@ function queryGua() {
     }
     
     // 查找爻辞
-    const yaoKey = '爻辞' + ['初', '二', '三', '四', '五', '上'][movingYao - 1] + '爻';
+    const yaoNames = ['初', '二', '三', '四', '五', '上'];
+    const yaoKey = '爻辞' + yaoNames[movingYao - 1] + '爻';
     const xiangKey = '小象传' + movingYao + '爻';
     const yaoText = guaData[yaoKey] || '';
     const xiangText = guaData[xiangKey] || '';
     
+    // 核心动爻信息 - 按照"卦名 爻名动：爻辞。象曰：象传"格式
+    const yaoFullName = yaoNames[movingYao - 1] + '爻';
+    const mainDisplayText = `${guaName}卦 ${yaoFullName}动：${yaoText} 象曰：${xiangText}`;
+    
     // 显示结果
     document.getElementById('gua-name').textContent = guaName;
     document.getElementById('gua-structure').textContent = `上${upperGua.name}${upperGua.symbol} · 下${lowerGua.name}${lowerGua.symbol}`;
-    document.getElementById('moving-yao-info').textContent = `${guaName}卦 · 第${movingYao}爻动`;
+    
+    // 核心动爻信息 - 最前面最显眼
+    document.getElementById('yao-main-display').textContent = mainDisplayText;
+    
+    // 动爻补充信息
+    document.getElementById('moving-yao-info').textContent = `${guaName}卦 · 第${movingYao}爻（${yaoFullName}）动`;
+    
+    // 其他卦辞信息
     document.getElementById('gua-ci').textContent = guaData.卦辞 || '';
     document.getElementById('tuan-zhuan').textContent = guaData.彖辞 || '';
     document.getElementById('da-xiang').textContent = guaData.大象辞 || '';
-    document.getElementById('yao-text').textContent = yaoText;
-    document.getElementById('xiang-text').textContent = `象曰：${xiangText}`;
     
     // 生成全卦爻辞
     generateAllYao(guaData, movingYao);
