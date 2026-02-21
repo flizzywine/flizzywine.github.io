@@ -311,7 +311,7 @@
                         <span class="text-2xl">🔮</span>
                         小六壬速断
                     </h2>
-                    <p class="text-gray-600 mt-2 text-sm">输入月日时或三个任意数字，快速占卜吉凶</p>
+                    <p class="text-gray-600 mt-2 text-sm">输入三个任意数字，快速占卜吉凶</p>
                 </div>
                 
                 <div class="p-6">
@@ -319,17 +319,17 @@
                     <div class="grid md:grid-cols-3 gap-4 mb-6">
                         <div class="space-y-2">
                             <label class="block text-sm font-semibold text-gray-700">第一个数字</label>
-                            <input type="number" id="liuren-1" placeholder="月 / 任意数" 
+                            <input type="number" id="liuren-1" placeholder="输入数字" 
                                 class="w-full px-4 py-3 border-2 border-blue-200 rounded-lg focus:border-blue-600 focus:outline-none transition-colors text-center text-lg">
                         </div>
                         <div class="space-y-2">
                             <label class="block text-sm font-semibold text-gray-700">第二个数字</label>
-                            <input type="number" id="liuren-2" placeholder="日 / 任意数" 
+                            <input type="number" id="liuren-2" placeholder="输入数字" 
                                 class="w-full px-4 py-3 border-2 border-blue-200 rounded-lg focus:border-blue-600 focus:outline-none transition-colors text-center text-lg">
                         </div>
                         <div class="space-y-2">
                             <label class="block text-sm font-semibold text-gray-700">第三个数字</label>
-                            <input type="number" id="liuren-3" placeholder="时 / 任意数" 
+                            <input type="number" id="liuren-3" placeholder="输入数字" 
                                 class="w-full px-4 py-3 border-2 border-blue-200 rounded-lg focus:border-blue-600 focus:outline-none transition-colors text-center text-lg">
                         </div>
                     </div>
@@ -339,16 +339,19 @@
                         🔮 起卦推算
                     </button>
 
-                    <!-- 六神说明 -->
+                    <!-- 九宫神煞说明 -->
                     <div class="mt-6 p-4 bg-blue-50 rounded-lg">
-                        <h3 class="font-semibold text-blue-800 mb-3 text-sm">🐉 六神顺序</h3>
-                        <div class="grid grid-cols-6 gap-2 text-center text-xs">
-                            <div class="bg-white p-2 rounded shadow-sm"><div class="font-bold text-blue-600">大安</div><div class="text-green-600">吉</div></div>
-                            <div class="bg-white p-2 rounded shadow-sm"><div class="font-bold text-blue-600">留连</div><div class="text-yellow-600">平</div></div>
-                            <div class="bg-white p-2 rounded shadow-sm"><div class="font-bold text-blue-600">速喜</div><div class="text-green-600">吉</div></div>
-                            <div class="bg-white p-2 rounded shadow-sm"><div class="font-bold text-blue-600">赤口</div><div class="text-red-600">凶</div></div>
-                            <div class="bg-white p-2 rounded shadow-sm"><div class="font-bold text-blue-600">小吉</div><div class="text-green-600">吉</div></div>
-                            <div class="bg-white p-2 rounded shadow-sm"><div class="font-bold text-blue-600">空亡</div><div class="text-gray-500">凶</div></div>
+                        <h3 class="font-semibold text-blue-800 mb-3 text-sm">🐉 九宫神煞</h3>
+                        <div class="grid grid-cols-3 md:grid-cols-9 gap-2 text-center text-xs">
+                            <div class="bg-white p-2 rounded shadow-sm"><div class="font-bold text-blue-600">大安</div><div class="text-green-600">木·吉</div></div>
+                            <div class="bg-white p-2 rounded shadow-sm"><div class="font-bold text-blue-600">留连</div><div class="text-yellow-600">木·平</div></div>
+                            <div class="bg-white p-2 rounded shadow-sm"><div class="font-bold text-blue-600">速喜</div><div class="text-green-600">火·吉</div></div>
+                            <div class="bg-white p-2 rounded shadow-sm"><div class="font-bold text-blue-600">赤口</div><div class="text-red-600">金·凶</div></div>
+                            <div class="bg-white p-2 rounded shadow-sm"><div class="font-bold text-blue-600">小吉</div><div class="text-green-600">水·吉</div></div>
+                            <div class="bg-white p-2 rounded shadow-sm"><div class="font-bold text-blue-600">空亡</div><div class="text-gray-500">土·凶</div></div>
+                            <div class="bg-white p-2 rounded shadow-sm"><div class="font-bold text-blue-600">病符</div><div class="text-orange-600">金·凶</div></div>
+                            <div class="bg-white p-2 rounded shadow-sm"><div class="font-bold text-blue-600">桃花</div><div class="text-pink-600">土·中</div></div>
+                            <div class="bg-white p-2 rounded shadow-sm"><div class="font-bold text-blue-600">天德</div><div class="text-green-600">金·吉</div></div>
                         </div>
                     </div>
 
