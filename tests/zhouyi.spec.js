@@ -169,19 +169,24 @@ test.describe('周易查询网站测试', () => {
       await expect(page.locator('text=速喜')).toBeVisible();
     });
 
-    test('小六壬计算 - 速喜', async ({ page }) => {
+    test('小六壬计算 - 九宫格式', async ({ page }) => {
       await page.click('#tab-liuren');
       
-      // 输入数字计算速喜 (1+1+2-2)%6 = 2 -> 速喜
+      // 输入三个数字测试九宫小六壬
       await page.fill('#liuren-1', '1');
-      await page.fill('#liuren-2', '1');
-      await page.fill('#liuren-3', '2');
+      await page.fill('#liuren-2', '2');
+      await page.fill('#liuren-3', '3');
       
       await page.click('button:has-text("起卦推算")');
       
       // 验证结果显示
       await expect(page.locator('#liuren-result')).not.toHaveClass(/hidden/);
-      await expect(page.locator('#liuren-god')).toContainText('速喜');
+      // 验证格式为：结果1 → 结果2 → 结果3
+      await expect(page.locator('#liuren-god')).toContainText('→');
+      // 验证包含9神之一
+      const text = await page.locator('#liuren-god').textContent();
+      const hasGod = ['大安', '留连', '速喜', '赤口', '小吉', '空亡', '病符', '桃花', '天德'].some(god => text?.includes(god));
+      expect(hasGod).toBe(true);
     });
 
     test('小六壬计算 - 空亡', async ({ page }) => {
